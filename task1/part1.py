@@ -66,7 +66,7 @@ def num_to_list(number):
     lst = List()
     while number != 0:
         lst.add_to_end(number % 10)
-        number /= 10
+        number //= 10
     return lst
     
 # Program operation example
