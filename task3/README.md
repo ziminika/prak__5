@@ -1,4 +1,4 @@
-# prak__5
+# prak__5/task3
 
 to start the program:
 
