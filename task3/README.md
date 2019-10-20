@@ -1,12 +1,13 @@
 # prak__5
 
 to start the program:
-python3 ***.py input_dir output_dir
+
+$ python3 --.py input_dir output_dir
 
 or:
 
-python3 ***.py input_dir
-(result in res_***)
+$ python3 --.py input_dir
+	(result in res_--)
 
 test (~250,6 MB):
   cons.py: ~ 46 min
