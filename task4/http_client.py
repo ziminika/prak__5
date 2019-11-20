@@ -3,6 +3,19 @@ from pandas import read_csv
 import pandas as pd
 import pickle
 
+# this function returns the DataFrame of the first number of tweets from the entered file
+def crop_file(file, number):
+	new_file = {}
+	for rows in file:
+		new_file[rows] = []
+		index = number
+		for value in file[rows]:
+			new_file[rows].append(value)
+			index -= 1
+			if index == 0:
+				break
+	return(pd.DataFrame(new_file))
+
 # server url
 url = 'http://0.0.0.0:8000/'
 
@@ -16,7 +29,7 @@ if filename.rfind('.csv') == -1:
 	print('Error: Invalid file format')
 	exit(1)
 try:
-	file = pd.read_csv(filename, sep=';')
+	file = pd.read_csv(filename, sep=';', encoding='ISO8859-1')
 except FileNotFoundError:
 	print('Error: File doesn\'t exists')
 	exit(1)
@@ -25,9 +38,11 @@ mode = input().lower()
 if  mode != 'stat' and mode != 'enti':
 	print('Error: Incorrect operating mode')
 	exit(1)
+print("Enter number of tweets: ", end='')
+number = int(input())
 
 # sending a file to the server
-msg = pickle.dumps(file)
+msg = pickle.dumps(crop_file(file, number))
 r = requests.post(url + mode, data=msg)
 
 # reception of results. The result is represented by a table dictionary: 

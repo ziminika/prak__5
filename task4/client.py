@@ -5,6 +5,19 @@ import os
 import pickle
 import time
 
+# this function returns the DataFrame of the first number of tweets from the entered file
+def crop_file(file, number):
+	new_file = {}
+	for rows in file:
+		new_file[rows] = []
+		index = number
+		for value in file[rows]:
+			new_file[rows].append(value)
+			index -= 1
+			if index == 0:
+				break
+	return(pd.DataFrame(new_file))
+
 # presentation of results
 output_dir = r'result/'
 f_words = output_dir + r"top_words.csv"
@@ -42,7 +55,7 @@ if filename.rfind('.csv') == -1:
 	print('Error: Invalid file format')
 	exit(1)
 try:
-	file = pd.read_csv(filename, sep=';')
+	file = pd.read_csv(filename, sep=';', encoding='ISO8859-1')
 except FileNotFoundError:
 	print('Error: File doesn\'t exists')
 	exit(1)
@@ -51,11 +64,13 @@ mode = input().lower()
 if  mode != 'stat' and mode != 'enti':
 	print('Error: Incorrect operating mode')
 	exit(1)
+print("Enter number of tweets: ", end='')
+number = int(input())
 
 # sending a file to the server
 sock = socket.socket()
 sock.connect(('localhost', 9081))
-msg = pickle.dumps(file)
+msg = pickle.dumps(crop_file(file, number))
 size = len(msg) 
 inf = mode.upper() + " " + str(size)
 sock.send(inf.encode('utf-8'))
